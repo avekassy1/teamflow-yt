@@ -95,7 +95,7 @@ export default function HeroSection() {
                     className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
                   >
                     <span className="text-foreground text-sm">
-                      Introducing Support for AI Models
+                      Introducing Your Energy Analyst
                     </span>
                     <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
 
@@ -118,7 +118,7 @@ export default function HeroSection() {
                   as="h1"
                   className="mx-auto mt-8 max-w-4xl text-balance text-5xl max-md:font-semibold md:text-7xl lg:mt-16 xl:text-[5.25rem]"
                 >
-                  Modern Solutions for Customer Engagement
+                  Seeing Electricity In New Ways
                 </TextEffect>
                 <TextEffect
                   per="line"
@@ -128,8 +128,7 @@ export default function HeroSection() {
                   as="p"
                   className="mx-auto mt-8 max-w-2xl text-balance text-lg"
                 >
-                  Highly customizable components for building modern websites
-                  and applications that look and feel the way you mean it.
+                  Markets data and insights. All in one place.
                 </TextEffect>
 
                 <AnimatedGroup
@@ -144,7 +143,7 @@ export default function HeroSection() {
                     },
                     ...transitionVariants,
                   }}
-                  className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row"
+                  className="mt-12 flex flex-col items-center justify-center gap-5 md:flex-row"
                 >
                   <div
                     key={1}
@@ -156,7 +155,7 @@ export default function HeroSection() {
                       className="rounded-xl px-5 text-base"
                     >
                       <Link href="#link">
-                        <span className="text-nowrap">Start Building</span>
+                        <span className="text-nowrap">Get Started </span>
                       </Link>
                     </Button>
                   </div>
@@ -164,7 +163,7 @@ export default function HeroSection() {
                     key={2}
                     asChild
                     size="lg"
-                    variant="ghost"
+                    variant="secondary"
                     className="h-10.5 rounded-xl px-5"
                   >
                     <Link href="#link">
