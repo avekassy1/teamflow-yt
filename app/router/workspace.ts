@@ -1,9 +1,13 @@
 import { KindeOrganization, KindeUser } from '@kinde-oss/kinde-auth-nextjs';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { os } from '@orpc/server';
 import z from 'zod';
+import { requiredAuthMiddleware } from '../middlewares/auth';
+import { base } from '../middlewares/base';
+import { requiredWorkspaceMiddleware } from '../middlewares/workspace';
 
-export const listWorkspaces = os
+export const listWorkspaces = base
+    .use(requiredAuthMiddleware)
+    .use(requiredWorkspaceMiddleware)
     .route({
         method: 'GET',
         path: '/workspace',
@@ -22,18 +26,23 @@ export const listWorkspaces = os
         user: z.custom<KindeUser<Record<string, unknown>>>(),
         currentWorkspace: z.custom<KindeOrganization<unknown>>(),
     }))
-    .handler(async ({input}) => {
+    .handler(async ({context, errors }) => {
         const {getUserOrganizations} = getKindeServerSession() // only runs on server side
         const organizations = await getUserOrganizations();
+        if (!organizations) {
+            throw errors.FORBIDDEN();
+        }
 
         const workspaces = organizations?.orgs.map((org) => ({
             id: org.code,
-            name: org.name,
-            avatar: org.name?.charAt(0) ?? 'W',
-          })) ?? [];
+            name: org.name ?? 'My Workspace',
+            avatar: org.name?.charAt(0) ?? 'M',
+          }));
         
         return {
             workspaces,
+            user: context.user,
+            currentWorkspace: context.workspace
         }
         
     })
