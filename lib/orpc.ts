@@ -20,4 +20,4 @@ const link = new RPCLink({
 /**
  * Fallback to client-side client if server-side client is not available.
  */
-export const client: RouterClient<typeof router> = globalThis.$client ?? createORPCClient(link)
+export const orpc: RouterClient<typeof router> = globalThis.$client ?? createORPCClient(link)

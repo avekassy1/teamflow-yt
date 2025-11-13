@@ -40,9 +40,8 @@ export const listWorkspaces = base
           }));
         
         return {
-            workspaces,
+            workspaces: workspaces,
             user: context.user,
             currentWorkspace: context.workspace
         }
-        
     })
