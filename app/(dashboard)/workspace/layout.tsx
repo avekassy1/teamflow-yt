@@ -7,12 +7,7 @@ import { orpc } from "@/lib/orpc"
 
 const WorkspaceLayout = async ({ children }: { children: ReactNode }) => {
   const queryClient = getQueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: ["workspace", "list"],
-    queryFn: () => orpc.workspace.list(),
-  });
-  // await queryClient.prefetchQuery(orpc.workspace.list.getQuery()); // getQuery doesn't work - not defined
+  await queryClient.prefetchQuery(orpc.workspace.list.queryOptions())
 
   return (
     <div className="flex w-full h-screen">

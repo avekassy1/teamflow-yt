@@ -4,6 +4,71 @@ import z from 'zod';
 import { requiredAuthMiddleware } from '../middlewares/auth';
 import { base } from '../middlewares/base';
 import { requiredWorkspaceMiddleware } from '../middlewares/workspace';
+import { workspaceSchema } from '../schemas/workspace';
+import { init, Organizations } from "@kinde/management-api-js";
+import { da } from 'zod/v4/locales';
+
+
+export const createWorkspace = base
+    .use(requiredAuthMiddleware)
+    .use(requiredWorkspaceMiddleware)
+    .route({
+        method: 'PUT',
+        path: '/workspace',
+        summary: "Create a new workspace",
+        tags: ['workspace'],
+    })
+    .input(workspaceSchema)
+    .output(
+        z.object({
+            orgCode: z.string(),
+            workspaceName: z.string()
+        })
+    )
+    .handler(async ({ context, errors, input }) => {
+        init();
+        let data;
+
+        try {
+            data = await Organizations.createOrganization({
+                requestBody: {
+                    name: input.name
+                }
+            });
+        } catch {
+            throw errors.FORBIDDEN();
+        }
+
+        if (!data.organization?.code) {
+            throw errors.FORBIDDEN({
+                message: "Org code is not defined"
+            });
+        }
+
+        try {
+            await Organizations.addOrganizationUsers({
+                orgCode: data.organization.code,
+                requestBody: {
+                    users: [
+                        {
+                            id: context.user.id,
+                            roles: ['admin'],
+                        }
+                    ]
+                }
+            })
+        } catch {
+            throw errors.FORBIDDEN()
+        }
+
+        const {refreshTokens} = getKindeServerSession();
+        await refreshTokens();
+
+        return {
+            orgCode: data.organization.code,
+            workspaceName: input.name
+        };
+    });
 
 export const listWorkspaces = base
     .use(requiredAuthMiddleware)
@@ -25,8 +90,9 @@ export const listWorkspaces = base
         ),
         user: z.custom<KindeUser<Record<string, unknown>>>(),
         currentWorkspace: z.custom<KindeOrganization<unknown>>(),
-    }))
-    .handler(async ({context, errors }) => {
+        })
+    )
+    .handler(async ({ context, errors }) => {
         const {getUserOrganizations} = getKindeServerSession() // only runs on server side
         const organizations = await getUserOrganizations();
         if (!organizations) {
@@ -44,4 +110,4 @@ export const listWorkspaces = base
             user: context.user,
             currentWorkspace: context.workspace
         }
-    })
+    });
