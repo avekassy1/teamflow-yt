@@ -7,11 +7,15 @@ import { requiredWorkspaceMiddleware } from '../middlewares/workspace';
 import { workspaceSchema } from '../schemas/workspace';
 import { init, Organizations } from "@kinde/management-api-js";
 import { da } from 'zod/v4/locales';
+import { standardSecurityMiddleware } from '../middlewares/arcjet/standard';
+import { heavyWriteSecurityMiddleware } from '../middlewares/arcjet/heavy-write';
 
 
 export const createWorkspace = base
     .use(requiredAuthMiddleware)
     .use(requiredWorkspaceMiddleware)
+    .use(standardSecurityMiddleware)
+    .use(heavyWriteSecurityMiddleware)
     .route({
         method: 'PUT',
         path: '/workspace',
