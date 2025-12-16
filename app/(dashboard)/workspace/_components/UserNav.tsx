@@ -31,7 +31,7 @@ export function UserNav() {
           size="icon"
           className="size-12 rounded-xl hover:rounded-lg transition-all duration-200 bg-background/50 border-border/50 hover:bg-accent hover:text-accent-foreground"
         >
-          <Avatar>
+          <Avatar className="">
             <AvatarImage
               src={getAvatar(user.picture, user.email!)}
               alt="User Image"

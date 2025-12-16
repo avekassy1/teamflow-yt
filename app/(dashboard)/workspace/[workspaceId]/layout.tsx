@@ -1,6 +1,10 @@
 import React from 'react'
 import { WorkspaceHeader } from './_components/WorkspaceHeader'
 import { CreateNewChannel } from './_components/CreateNewChannel'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChannelList } from './_components/ChannelList'
+import { WorkspaceMemebersList } from './_components/WorkspaceMembersList'
 
 const ChannelListLayout = ({children}: {children: React.ReactNode}) => {
   return (
@@ -12,6 +16,37 @@ const ChannelListLayout = ({children}: {children: React.ReactNode}) => {
       </div>
       <div className="px-4 py-2">
         <CreateNewChannel />
+      </div>
+
+      {/* Channel List */}
+      <div className="flex-1 overflow-y-auto px-4">
+        <Collapsible defaultOpen>
+        <CollapsibleTrigger 
+          className='flex w-full items-center justify-between px-2 
+            py-1 text-sm font-medium text-muted-foreground hover:text-accent-foreground'>
+          Main
+          <ChevronDown className='size-4 transition-transform duration-200' />
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <ChannelList />
+        </CollapsibleContent>
+        </Collapsible>
+      </div>
+
+      {/* Members List */}
+      <div className="px-4 py-2 border-t border-border">
+        <Collapsible defaultOpen>
+          <CollapsibleTrigger 
+            className='flex w-full items-center justify-between px-2 
+              py-1 text-sm font-medium text-muted-foreground hover:text-accent-foreground
+              [&[data-state=open]>svg]:rotate-180'>
+            Members
+            <ChevronUp className='size-4 transition-transform duration-200' />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <WorkspaceMemebersList />
+          </CollapsibleContent>
+        </Collapsible>
       </div>
     </div>
     </>
